@@ -64,13 +64,13 @@
     var c = cityJson.c;
     // console.log(p,c,d)
     for (var pKey in p) {
-        if (p[pKey] == city[0]) {
+        if (p[pKey] == city[0]) {//取得对应的省
             var ct = c[pKey]
             for (var cKey in ct) {
-                if (ct[cKey] == city[1]) {
+                if (ct[cKey] == city[1]) {//取得对应的市
                     var dt = d[cKey];
                     for (var dKey in dt) {
-                        if (dt[dKey].name == city[2]) {
+                        if (dt[dKey].name == city[2]) {//取得对应的区 并且获取经纬度
                             // console.log(dKey);
                             $('#location').val(dt[dKey].lon+','+dt[dKey].lat)
                             break;
