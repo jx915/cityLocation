@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>jq三级联动(2017-11-15最新全国行政三级联动)</title>
+  <meta charset="utf-8">
+  <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+  <script src="js/jsAddress.js"></script>
+  <style type="text/css">
+    body {
+      margin: 50px auto;
+      text-align: center
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <select class="province" name="province">
+      </select>
+      <select class="city" name="city">
+      </select>
+      <select class="district" name="district">
+      </select>
+      <button onclick="getLocation()">获取经纬度</button>
+      <input type="text" id="location">
+    </div>
+
+  </div>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+  //默认选择 
+  addressInit('province', 'city', 'district', '广东', '深圳市', '宝安区');
+
+  //获取经纬度json
+  function getJson() {
+    var cityJson;
+    $.ajax({
+      url: './json/city.json',
+      async: false,
+      success: function (res) {
+        cityJson = res;
+      }
+    });
+    return cityJson;
+  }
+  var cityJson = getJson();
+  console.log(cityJson);
+
+  //按钮点击事件
+  function getLocation() {
+    var city = [];
+    city.push($('.province').val());
+    city.push($('.city').val());
+    city.push($('.district').val());
+    console.log(city)
+    var p = cityJson.p;
+    var d = cityJson.d;
+    var c = cityJson.c;
+    // console.log(p,c,d)
+    for (var pKey in p) {
+        if (p[pKey] == city[0]) {
+            var ct = c[pKey]
+            for (var cKey in ct) {
+                if (ct[cKey] == city[1]) {
+                    var dt = d[cKey];
+                    for (var dKey in dt) {
+                        if (dt[dKey].name == city[2]) {
+                            // console.log(dKey);
+                            $('#location').val(dt[dKey].lon+','+dt[dKey].lat)
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+  }
+</script>
